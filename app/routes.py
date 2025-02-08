@@ -43,7 +43,7 @@ def edit_form(pk):
     url="%s/%s" % (BACKEND_URL, pk)
     response =requests.get(url)
     if response.status_code==200:
-        single_task=response.json().get("task")
+        single_task=response.json().get("task") #this template does not exist yet
         return render_template("edit.html", task=single_task)
     return(
         render_template("error.html", error=response.statsus_code),
@@ -88,7 +88,7 @@ def delete_task(pk):
 @app.post("/tasks/create")
 def create_task():
     url = BACKEND_URL
-    response = requests.post(url, json=flask_request.form)
+    response = requests.post(url, json=flask_request.form)#json over the dictory
     if response.status_code == 204:
         return render_template("success.html", message="Task created")
     return (
