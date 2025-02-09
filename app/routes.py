@@ -25,6 +25,10 @@ def about():
 def newtask():
     return render_template("newtask.html")
 
+@app.get("/task")
+def viewtask():
+    return render_template("viewtask.html")
+
 
 
 @app.get("/tasks")
@@ -91,6 +95,18 @@ def create_task():
     response = requests.post(url, json=flask_request.form)#json over the dictory
     if response.status_code == 204:
         return render_template("success.html", message="Task created")
+    return (
+        render_template("error.html", error=response.status_code),
+        response.status_code
+    )
+
+@app.get("/tasks/<int:pk>")
+def task_detail(pk):
+    url="%s/%s" % (BACKEND_URL, pk)
+    response = requests.get(url)
+    if response.status_code==200:
+        single_task =response.json().get("task")
+        return render_template("viewtask.html",task=single_task)
     return (
         render_template("error.html", error=response.status_code),
         response.status_code
